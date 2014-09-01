@@ -53,12 +53,14 @@ BOOL shouldBlock = YES;
 
 	NSDictionary* customizationDict = [PPPreferenceProtect sharedInstance].lockedPanes[name];
 	if(!customizationDict) {
-		return;
+		shouldBlock = NO;
+		[self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
 	}
 
 	password = customizationDict[@"Password"];
 	if(!password || [password length] == 0) {
-		return;
+		shouldBlock = NO;
+		[self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
 	}
 
 	BOOL securePassword = [customizationDict[@"securePassword"] boolValue];
