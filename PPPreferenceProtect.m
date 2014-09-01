@@ -2,7 +2,7 @@
 #import "NSString+Hashes.h"
 
 #define s(z, ...) [NSString stringWithFormat:z, ##__VA_ARGS__]
-#define log(x, y) if([self.lockedPanes[y][@"shouldLog"] boolValue]) { NSLog(@"[libPreferenceProtect] %@", x); }
+#define log(x, y, z) if([self.lockedPanes[y][@"shouldLog"] boolValue] || z) { NSLog(@"[libPreferenceProtect] %@", x); }
 
 #define PPSettingsPath [NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/libpreferenceprotect.plist"]
 
@@ -29,26 +29,35 @@ static PPPreferenceProtect* preferenceProtect;
 - (void)addPassword:(NSString *)password forPaneWithName:(NSString *)name {
 	[self reloadPrefs];
 
-	NSDictionary* newDict = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObject:[password sha1]] forKeys:[NSArray arrayWithObject:@"Password"]];
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"Password"] = [password sha1];
 	self.lockedPanes[name] = newDict;
 
 	[self savePrefs:name];
-	log(s(@"Added password for pane %@", name), name);
+	log(s(@"Added password for pane %@", name), name, NO);
 }
 
 - (BOOL)removePasswordForPaneWithName:(NSString *)name withPassword:(NSString *)password {
 	[self reloadPrefs];
+
+	// About to get destroyed so it will never log
+	BOOL shouldLog = [self.lockedPanes[name][@"shouldLog"] boolValue];
+	if(!self.lockedPanes[name][@"shouldLog"]) { shouldLog = YES; }
+
 	if(!self.lockedPanes[name][@"Password"]) {
-		log(s(@"Cannot remove password from pane %@ because it does not exist", name), name);
+		log(s(@"Cannot remove password from pane %@ because it does not exist", name), name, NO);
 		return NO;
 	}
 	if([self.lockedPanes[name][@"Password"] isEqualToString:[password sha1]]) {
 		[self.lockedPanes removeObjectForKey:name];
 		[self savePrefs:name];
-		log(s(@"Removed password for pane %@", name), name);
+		log(s(@"Removed password for pane %@", name), name, shouldLog);
 		return YES;
 	}
-	log(s(@"Wrong password to remove password for pane %@", name), name);
+	log(s(@"Wrong password to remove password for pane %@", name), name, NO);
 	return NO;
 }
 
@@ -62,8 +71,15 @@ static PPPreferenceProtect* preferenceProtect;
 
 - (void)savePrefs:(NSString *)name {
 	if(![self.lockedPanes writeToFile:PPSettingsPath atomically:YES]) {
-		log(@"Error saving settings", name);
+		log(@"Error saving settings", name, NO);
 	}
+}
+
+- (BOOL)paneExists:(NSString *)name {
+	if([[self.lockedPanes allKeys] containsObject:name]) {
+		return YES;
+	}
+	return NO;
 }
 
 // Setters

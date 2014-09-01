@@ -9,6 +9,7 @@
 // Returns true if pane name : password combination was correct and it removed
 // Verify that you know the password
 - (BOOL)removePasswordForPaneWithName:(NSString *)name withPassword:(NSString *)password;
+- (BOOL)paneExists:(NSString *)name;
 
 // Setters
 - (void)setAlertTitle:(NSString *)alertTitle forPaneWithName:(NSString *)name;
