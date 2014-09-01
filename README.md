@@ -8,8 +8,7 @@ Example Usage
 
 1. Add "libpreferenceprotect" to your control "Depends" section
 
-2.
-```objc
+2. ```objc
 #import "PPPreferenceProtect.h"
 [[%c(PPPreferenceProtect) sharedInstance] addPassword:@"123" forPaneWithName:@"Wi-Fi"];
 [[%c(PPPreferenceProtect) sharedInstance] setKeyboardType:UIKeyboardTypeNumberPad forPaneWithName:@"Wi-Fi"];
