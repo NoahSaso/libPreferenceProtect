@@ -9,6 +9,8 @@
 - (void)showPromptWithTableView:(UITableView *)tableView andRow:(int)row inSection:(int)section forPaneName:(NSString *)name;
 @end
 
+NSString* password;
+UIAlertView* alertPrompt;
 NSIndexPath* previousSelectedPath;
 BOOL shouldBlock = YES;
 
@@ -54,7 +56,7 @@ BOOL shouldBlock = YES;
 		return;
 	}
 
-	NSString* password = customizationDict[@"Password"];
+	password = customizationDict[@"Password"];
 	if(!password || [password length] == 0) {
 		return;
 	}
@@ -62,6 +64,11 @@ BOOL shouldBlock = YES;
 	BOOL securePassword = [customizationDict[@"securePassword"] boolValue];
 	if(!customizationDict[@"securePassword"]) {
 		securePassword = YES;
+	}
+
+	BOOL autoAccept = [customizationDict[@"autoAccept"] boolValue];
+	if(!customizationDict[@"autoAccept"]) {
+		autoAccept = NO;
 	}
 
 	NSString* alertTitle = customizationDict[@"alertTitle"];
@@ -72,6 +79,11 @@ BOOL shouldBlock = YES;
 	NSString* alertMessage = customizationDict[@"alertMessage"];
 	if(!alertMessage) {
 		alertMessage = @"Enter Password:";
+	}
+
+	NSString* placeholder = customizationDict[@"placeholder"];
+	if(!placeholder) {
+		placeholder = @"Password";
 	}
 
 	NSString* cancelBnTitle = customizationDict[@"cancelBnTitle"];
@@ -89,7 +101,7 @@ BOOL shouldBlock = YES;
 		keyboardType = UIKeyboardTypeDefault;
 	}
 
-	UIAlertView* alertPrompt = [[UIAlertView alloc]
+	alertPrompt = [[UIAlertView alloc]
 		initWithTitle: alertTitle
 		message: alertMessage
 		cancelButtonTitle: cancelBnTitle
@@ -100,7 +112,12 @@ BOOL shouldBlock = YES;
 		alertStyle = UIAlertViewStyleSecureTextInput;
 	}
 	[alertPrompt setAlertViewStyle:alertStyle];
+	
+	if(autoAccept) {
+		[[alertPrompt textFieldAtIndex:0] addTarget:self action:@selector(passwordTextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+	}
 
+	[alertPrompt textFieldAtIndex:0].placeholder = placeholder;
 	[alertPrompt textFieldAtIndex:0].keyboardType = keyboardType;
 
 	[alertPrompt setHandler: ^(UIAlertView* alert, NSInteger buttonIndex) {
@@ -130,6 +147,14 @@ BOOL shouldBlock = YES;
 
 	[alertPrompt show];
 
+}
+
+%new
+- (void)passwordTextFieldDidChange:(UITextField *)textField {
+    if([[textField.text sha1] isEqualToString: password]) {
+        [alertPrompt dismissWithClickedButtonIndex:1 animated:YES];
+        [alertPrompt.delegate alertView:alertPrompt clickedButtonAtIndex:1];
+    }
 }
 
 %end

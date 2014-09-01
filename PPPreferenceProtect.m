@@ -2,7 +2,7 @@
 #import "NSString+Hashes.h"
 
 #define s(z, ...) [NSString stringWithFormat:z, ##__VA_ARGS__]
-#define log(x, y, z) if([self.lockedPanes[y][@"shouldLog"] boolValue] || z) { NSLog(@"[libPreferenceProtect] %@", x); }
+#define log(x, y, z) if([self.lockedPanes[y][@"shouldLog"] boolValue] || z || (!self.lockedPanes[y][@"shouldLog"] && YES)) { NSLog(@"[libPreferenceProtect] %@", x); }
 
 #define PPSettingsPath [NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/libpreferenceprotect.plist"]
 
@@ -53,7 +53,12 @@ static PPPreferenceProtect* preferenceProtect;
 	}
 	if([self.lockedPanes[name][@"Password"] isEqualToString:[password sha1]]) {
 		[self.lockedPanes removeObjectForKey:name];
+
+		NSMutableDictionary* newDict = [[NSMutableDictionary alloc] init];
+		newDict[@"shouldLog"] = @(shouldLog);
+		self.lockedPanes[name] = newDict;
 		[self savePrefs:name];
+		
 		log(s(@"Removed password for pane %@", name), name, shouldLog);
 		return YES;
 	}
@@ -105,6 +110,19 @@ static PPPreferenceProtect* preferenceProtect;
 		newDict = [[NSMutableDictionary alloc] init];
 	}
 	newDict[@"alertMessage"] = alertMessage;
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setAlertPlaceholder:(NSString *)placeholder forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"placeholder"] = placeholder;
 	self.lockedPanes[name] = newDict;
 
 	[self savePrefs:name];
@@ -170,6 +188,19 @@ static PPPreferenceProtect* preferenceProtect;
 		newDict = [[NSMutableDictionary alloc] init];
 	}
 	newDict[@"shouldLog"] = @(shouldLog);
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setAutoAccept:(BOOL)autoAccept forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"autoAccept"] = @(autoAccept);
 	self.lockedPanes[name] = newDict;
 
 	[self savePrefs:name];
