@@ -1,0 +1,9 @@
+Package: libpreferenceprotect
+Name: libPreferenceProtect
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Library to protect preference pane
+Maintainer: Sassoty <sassoty@gmail.com>
+Author: Sassoty <sassoty@gmail.com>
+Section: Tweaks

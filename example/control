@@ -1,0 +1,9 @@
+Package: com.sassoty.libpreferenceprotectexample
+Name: libPreferenceProtectExample
+Depends: mobilesubstrate, libpreferenceprotect
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Example tweak for libPreferenceProtect
+Maintainer: Sassoty <sassoty@gmail.com>
+Author: Sassoty <sassoty@gmail.com>
+Section: Tweaks
