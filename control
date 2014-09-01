@@ -6,4 +6,4 @@ Architecture: iphoneos-arm
 Description: Library to protect preference panes
 Maintainer: Sassoty <sassoty@gmail.com>
 Author: Sassoty <sassoty@gmail.com>
-Section: Tweaks
+Section: Development
