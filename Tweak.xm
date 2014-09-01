@@ -55,12 +55,14 @@ BOOL shouldBlock = YES;
 	if(!customizationDict) {
 		shouldBlock = NO;
 		[self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
+		return;
 	}
 
 	password = customizationDict[@"Password"];
 	if(!password || [password length] == 0) {
 		shouldBlock = NO;
 		[self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
+		return;
 	}
 
 	BOOL securePassword = [customizationDict[@"securePassword"] boolValue];
