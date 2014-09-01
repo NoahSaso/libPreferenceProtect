@@ -2,7 +2,7 @@
 #import "NSString+Hashes.h"
 
 #define s(z, ...) [NSString stringWithFormat:z, ##__VA_ARGS__]
-#define log(z) if(self.shouldLog) { NSLog(@"[libPreferenceProtect] %@", z); }
+#define log(x, y) if([self.lockedPanes[y][@"shouldLog"] boolValue]) { NSLog(@"[libPreferenceProtect] %@", x); }
 
 #define PPSettingsPath [NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/libpreferenceprotect.plist"]
 
@@ -10,26 +10,11 @@ static PPPreferenceProtect* preferenceProtect;
 
 @implementation PPPreferenceProtect
 
-// Customize alert properties
-//@synthesize customAlertTitle, customAlertMessage, customAlertCancelButtonTitle, customAlertEnterButtonTitle, customKeyboardType;
-// Other
-@synthesize lockedPanes/*, securePassword, shouldLog, */;
+@synthesize lockedPanes;
 
 - (id)init {
 	if(self = [super init]) {
-
-		/*
-		self.securePassword = YES;
-		self.shouldLog = NO;
-
-		self.customAlertMessage = @"Enter Password:";
-		self.customAlertCancelButtonTitle = @"Cancel";
-		self.customAlertEnterButtonTitle = @"Enter";
-		self.customKeyboardType = UIKeyboardTypeDefault;
-		*/
-
 		[self reloadPrefs];
-
 	}
 	return self;
 }
@@ -47,23 +32,23 @@ static PPPreferenceProtect* preferenceProtect;
 	NSDictionary* newDict = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObject:[password sha1]] forKeys:[NSArray arrayWithObject:@"Password"]];
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
-	log(s(@"Added password for pane %@", name));
+	[self savePrefs:name];
+	log(s(@"Added password for pane %@", name), name);
 }
 
 - (BOOL)removePasswordForPaneWithName:(NSString *)name withPassword:(NSString *)password {
 	[self reloadPrefs];
 	if(!self.lockedPanes[name][@"Password"]) {
-		log(s(@"Cannot remove password from pane %@ because it does not exist", name));
+		log(s(@"Cannot remove password from pane %@ because it does not exist", name), name);
 		return NO;
 	}
 	if([self.lockedPanes[name][@"Password"] isEqualToString:[password sha1]]) {
 		[self.lockedPanes removeObjectForKey:name];
-		[self savePrefs];
-		log(s(@"Removed password for pane %@", name));
+		[self savePrefs:name];
+		log(s(@"Removed password for pane %@", name), name);
 		return YES;
 	}
-	log(s(@"Wrong password to remove password for pane %@", name));
+	log(s(@"Wrong password to remove password for pane %@", name), name);
 	return NO;
 }
 
@@ -75,9 +60,9 @@ static PPPreferenceProtect* preferenceProtect;
 	}
 }
 
-- (void)savePrefs {
+- (void)savePrefs:(NSString *)name {
 	if(![self.lockedPanes writeToFile:PPSettingsPath atomically:YES]) {
-		log(@"Error saving settings");
+		log(@"Error saving settings", name);
 	}
 }
 
@@ -93,7 +78,7 @@ static PPPreferenceProtect* preferenceProtect;
 	newDict[@"alertTitle"] = alertTitle;
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
+	[self savePrefs:name];
 }
 
 - (void)setAlertMessage:(NSString *)alertMessage forPaneWithName:(NSString *)name {
@@ -106,7 +91,7 @@ static PPPreferenceProtect* preferenceProtect;
 	newDict[@"alertMessage"] = alertMessage;
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
+	[self savePrefs:name];
 }
 
 - (void)setCancelButtonTitle:(NSString *)cancelBnTitle forPaneWithName:(NSString *)name {
@@ -119,7 +104,7 @@ static PPPreferenceProtect* preferenceProtect;
 	newDict[@"cancelBnTitle"] = cancelBnTitle;
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
+	[self savePrefs:name];
 }
 
 - (void)setEnterButtonTitle:(NSString *)enterBnTitle forPaneWithName:(NSString *)name {
@@ -132,7 +117,7 @@ static PPPreferenceProtect* preferenceProtect;
 	newDict[@"enterBnTitle"] = enterBnTitle;
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
+	[self savePrefs:name];
 }
 
 - (void)setKeyboardType:(UIKeyboardType)keyboardType forPaneWithName:(NSString *)name {
@@ -145,7 +130,7 @@ static PPPreferenceProtect* preferenceProtect;
 	newDict[@"keyboardType"] = [NSNumber numberWithInt:keyboardType];
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
+	[self savePrefs:name];
 }
 
 - (void)setSecurePassword:(BOOL)securePassword forPaneWithName:(NSString *)name {
@@ -158,7 +143,7 @@ static PPPreferenceProtect* preferenceProtect;
 	newDict[@"securePassword"] = @(securePassword);
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
+	[self savePrefs:name];
 }
 
 - (void)setShouldLog:(BOOL)shouldLog forPaneWithName:(NSString *)name {
@@ -171,7 +156,7 @@ static PPPreferenceProtect* preferenceProtect;
 	newDict[@"shouldLog"] = @(shouldLog);
 	self.lockedPanes[name] = newDict;
 
-	[self savePrefs];
+	[self savePrefs:name];
 }
 
 @end
