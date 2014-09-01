@@ -19,3 +19,9 @@ Depends: mobilesubstrate, libpreferenceprotect
 ```
 
 Be awesome
+
+Credit
+======
+
+NSString+Hashes: https://github.com/mspasov/NSString-Hashes
+UIAlertView+IABlocks: https://github.com/Innovattic/UIKit-Blocks
