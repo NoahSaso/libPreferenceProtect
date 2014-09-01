@@ -7,6 +7,9 @@ Example Usage
 =============
 
 1. Add "libpreferenceprotect" to your control "Depends" section
+```makefile
+Depends: mobilesubstrate, libpreferenceprotect
+```
 
 2. Add code
 ```objc
