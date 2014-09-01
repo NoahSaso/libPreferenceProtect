@@ -15,4 +15,4 @@ Example Usage
 [[%c(PPPreferenceProtect) sharedInstance] setKeyboardType:UIKeyboardTypeNumberPad forPaneWithName:@"Wi-Fi"];
 ```
 
-3. Be awesome
+Be awesome
