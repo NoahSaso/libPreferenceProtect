@@ -8,9 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+@interface __NSCFString : NSString
+@end
+
 NSString *NSStringNotNull(NSString *string);
 
 @interface NSString (Hashes)
+
+- (NSString *)md5;
+- (NSString *)sha1;
+- (NSString *)sha256;
+- (NSString *)sha512;
+
+@end
+
+@interface __NSCFString (Hashes)
 
 - (NSString *)md5;
 - (NSString *)sha1;

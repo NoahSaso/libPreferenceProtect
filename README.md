@@ -28,3 +28,5 @@ Special thanks to [@_mxms](http://twitter.com/_mxms) for all the help!
 NSString+Hashes: https://github.com/mspasov/NSString-Hashes
 
 UIAlertView+IABlocks: https://github.com/Innovattic/UIKit-Blocks
+
+UIDeviceHardware: https://gist.github.com/Jaybles/1323251

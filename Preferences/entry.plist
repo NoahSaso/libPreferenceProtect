@@ -1,0 +1,10 @@
+{
+    entry = {
+	bundle = libPreferenceProtect;
+	cell = PSLinkCell;
+	detail = libPreferenceProtectListController;
+	icon = libPreferenceProtect.png;
+	isController = 1;
+	label = libPreferenceProtect;
+    };
+}

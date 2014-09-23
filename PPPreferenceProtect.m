@@ -141,6 +141,19 @@ static PPPreferenceProtect* preferenceProtect;
 	[self savePrefs:name];
 }
 
+- (void)setEnterButtonHidden:(BOOL)cancelBnHidden forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"enterBnHidden"] = @(cancelBnHidden);
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
 - (void)setEnterButtonTitle:(NSString *)enterBnTitle forPaneWithName:(NSString *)name {
 	[self reloadPrefs];
 
@@ -201,6 +214,178 @@ static PPPreferenceProtect* preferenceProtect;
 		newDict = [[NSMutableDictionary alloc] init];
 	}
 	newDict[@"autoAccept"] = @(autoAccept);
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotButtonTitle:(NSString *)forgotBnTitle forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotBnTitle"] = forgotBnTitle;
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+// Forgot button setters
+
+- (void)setForgotEnabled:(BOOL)enabled forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotEnabled"] = @(enabled);
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotPassword:(NSString *)password forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotPassword"] = [password sha1];
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotAlertTitle:(NSString *)alertTitle forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotAlertTitle"] = alertTitle;
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotAlertMessage:(NSString *)alertMessage forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotAlertMessage"] = alertMessage;
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotAlertPlaceholder:(NSString *)placeholder forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotPlaceholder"] = placeholder;
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotCancelButtonTitle:(NSString *)cancelBnTitle forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotCancelBnTitle"] = cancelBnTitle;
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotEnterButtonHidden:(BOOL)cancelBnHidden forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotEnterBnHidden"] = @(cancelBnHidden);
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotEnterButtonTitle:(NSString *)enterBnTitle forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotEnterBnTitle"] = enterBnTitle;
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotKeyboardType:(UIKeyboardType)keyboardType forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotKeyboardType"] = [NSNumber numberWithInt:keyboardType];
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotSecurePassword:(BOOL)securePassword forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotSecurePassword"] = @(securePassword);
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotAutoAccept:(BOOL)autoAccept forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotAutoAccept"] = @(autoAccept);
+	self.lockedPanes[name] = newDict;
+
+	[self savePrefs:name];
+}
+
+- (void)setForgotEnterPane:(BOOL)enterPane andNotify:(NSString *)notificationId forPaneWithName:(NSString *)name {
+	[self reloadPrefs];
+
+	NSMutableDictionary* newDict = [self.lockedPanes[name] mutableCopy];
+	if(!newDict) {
+		newDict = [[NSMutableDictionary alloc] init];
+	}
+	newDict[@"forgotCorrectEnterPane"] = @(enterPane);
+	newDict[@"forgotCorrectNotify"] = notificationId;
 	self.lockedPanes[name] = newDict;
 
 	[self savePrefs:name];
